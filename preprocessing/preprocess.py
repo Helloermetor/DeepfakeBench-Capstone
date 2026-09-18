@@ -371,7 +371,7 @@ def preprocess(dataset_path, mask_path, mode, num_frames, stride, logger):
     start_time = time.monotonic()
 
     # Define the number of processes based on CPU capabilities
-    num_processes = os.cpu_count()
+    num_processes = 1
 
     # Use multiprocessing to process videos in parallel
     with concurrent.futures.ThreadPoolExecutor(max_workers=num_processes) as executor:
@@ -439,11 +439,8 @@ if __name__ == '__main__':
     # Define dataset path based on the input arguments
     ## faceforensic++
     if dataset_name == 'FaceForensics++':
-        sub_dataset_names = ["original_sequences/youtube","original_sequences/actors", \
-                             "manipulated_sequences/Deepfakes", \
-                            "manipulated_sequences/Face2Face", "manipulated_sequences/FaceSwap", \
-                            "manipulated_sequences/NeuralTextures","manipulated_sequences/FaceShifter",\
-                            "manipulated_sequences/DeepFakeDetection"]
+        sub_dataset_names = ["original_sequences/youtube",
+                             "manipulated_sequences/Deepfakes"]
         sub_dataset_paths = [Path(os.path.join(dataset_path, name, comp)) for name in sub_dataset_names]
         # mask
         mask_dataset_names = ["manipulated_sequences/Deepfakes", "manipulated_sequences/Face2Face", \

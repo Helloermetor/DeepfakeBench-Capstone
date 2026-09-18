@@ -1,7 +1,51 @@
-﻿.idea
-*__pycache__*
-*.vscode*
-*.pyc
-*.pth
-*.pt
+﻿# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# IDE
+.idea/
+.vscode/
+
+# Raw / generated dataset videos and frames
+datasets/**/videos/
+datasets/**/frames/
+
+# Raw video files
+*.mp4
+*.avi
+*.mov
+*.mkv
+
+# Debug / temporary output
+debug_output/
+
+# DeepfakeBench pretrained and released model weights
+training/pretrained/
+training/weights/
+
+# Keep custom trained model
+!custom_training/
+!custom_training/*.pth
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python virtual environments
+.venv/
+venv/
+env/  
+# Dataset directory - keep only metadata CSV
+datasets/rgb/*
+!datasets/rgb/FaceForensics++/
+datasets/rgb/FaceForensics++/*
+!datasets/rgb/FaceForensics++/simple_frames/
+datasets/rgb/FaceForensics++/simple_frames/*
+!datasets/rgb/FaceForensics++/simple_frames/dataset.csv
+
+# Dlib landmark model - download separately
 *.dat
+
+# Preprocessing logs
+preprocessing/logs/

@@ -47,5 +47,8 @@ datasets/rgb/FaceForensics++/simple_frames/*
 # Dlib landmark model - download separately
 *.dat
 
+# Keep the Dlib landmark model required by preprocessing
+!preprocessing/dlib_tools/shape_predictor_81_face_landmarks.dat
+
 # Preprocessing logs
 preprocessing/logs/

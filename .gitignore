@@ -20,9 +20,16 @@ datasets/**/frames/
 # Debug / temporary output
 debug_output/
 
-# DeepfakeBench pretrained and released model weights
-training/pretrained/
+# DeepfakeBench model weights
 training/weights/
+
+# Keep Xception pretrained backbone
+!training/pretrained/
+!training/pretrained/xception-b5690688.pth
+
+# Keep custom trained model
+!custom_training/
+!custom_training/*.pth
 
 # Keep custom trained model
 !custom_training/

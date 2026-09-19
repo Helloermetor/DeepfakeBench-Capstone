@@ -27,11 +27,7 @@ training/weights/
 !training/pretrained/
 !training/pretrained/xception-b5690688.pth
 
-# Keep custom trained model
-!custom_training/
-!custom_training/*.pth
-
-# Keep custom trained model
+# Keep custom trained models
 !custom_training/
 !custom_training/*.pth
 
@@ -42,16 +38,20 @@ Thumbs.db
 # Python virtual environments
 .venv/
 venv/
-env/  
+env/
+
 # Dataset directory - keep only metadata CSV
 datasets/rgb/*
+
 !datasets/rgb/FaceForensics++/
 datasets/rgb/FaceForensics++/*
+
 !datasets/rgb/FaceForensics++/simple_frames/
 datasets/rgb/FaceForensics++/simple_frames/*
+
 !datasets/rgb/FaceForensics++/simple_frames/dataset.csv
 
-# Dlib landmark model - download separately
+# Dlib landmark model
 *.dat
 
 # Keep the Dlib landmark model required by preprocessing

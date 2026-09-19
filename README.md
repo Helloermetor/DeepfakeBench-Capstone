@@ -1,107 +1,116 @@
-# Deepfake Detection using Xception and DeepfakeBench
+# DeepfakeBench Detection
 
-## 1. Project Overview
+## Overview
 
-This project implements a deepfake detection system using the **DeepfakeBench framework** and an **Xception-based deepfake detector**.
+> An Xception model initialized with ImageNet-pretrained weights was fine-tuned on FaceForensics++ C23, and the best trained checkpoint (`xception_custom_best.pth`) was used for evaluation.
 
-The system is designed to classify videos/facial frames into two categories:
+## Model and Weights
 
-- **Real**
-- **Deepfake**
+### Model
 
-The current experiment uses the **FaceForensics++ dataset with C23 compression**.
+The project uses the **Xception** architecture provided by DeepfakeBench for binary deepfake classification.
 
-The project includes the complete workflow from raw videos to face preprocessing, dataset preparation, model training, frame-level testing, video-level prediction and evaluation.
+The model classifies each processed face image into two classes:
 
-The next stage of the project is **cross-dataset evaluation on Celeb-DF v2** using the existing trained Xception model.
+- `0` — Real
+- `1` — Deepfake
 
----
+### Model Initialization
 
-# 2. Project Objectives
+The custom Xception model was initialized using the ImageNet-pretrained Xception backbone:
 
-The main objectives of this project are:
+```
+training/pretrained/xception-b5690688.pth
+```
 
-1. Build a deepfake detection pipeline using DeepfakeBench.
-2. Prepare real and manipulated videos for deepfake detection.
-3. Extract frames from videos.
-4. Detect faces using Dlib.
-5. Detect facial landmarks.
-6. Align and crop faces.
-7. Resize face crops to 256 × 256.
-8. Create a dataset CSV for model training and testing.
-9. Train an Xception-based binary classifier.
-10. Evaluate the model at frame level.
-11. Aggregate frame predictions to obtain video-level predictions.
-12. Calculate Precision, Recall, F1-score and AUROC.
-13. Perform cross-dataset evaluation using Celeb-DF v2.
-14. Analyze the generalization of the model across datasets.
+These pretrained weights were used as the starting point for our training.
 
----
+The model was then fine-tuned on the FaceForensics++ C23 dataset using the custom training script:
 
-# 3. Complete Project Workflow
+```
+train_xception_custom.py
+```
 
-The complete project workflow is:
+### Custom Training Checkpoint
 
-```text
-                    DATASET
-                       │
-                       ▼
-              FaceForensics++
-                       │
-                       ▼
-               Video Selection
-                       │
-                       ▼
-                Frame Sampling
-                       │
-                       ▼
-               Face Detection
-                    (Dlib)
-                       │
-                       ▼
-            Facial Landmark Detection
-                       │
-                       ▼
-                Face Alignment
-                       │
-                       ▼
-                Face Cropping
-                       │
-                       ▼
-              Resize to 256 × 256
-                       │
-                       ▼
-                Dataset CSV
-                       │
-                       ▼
-              Train / Validation /
-                  Test Split
-                       │
-                       ▼
-                 Xception Model
-                       │
-                       ▼
-                   Training
-                       │
-                       ▼
-             Best Model Checkpoint
-                       │
-                       ▼
-                    Testing
-                       │
-             ┌─────────┴─────────┐
-             ▼                   ▼
-       Frame-Level          Video-Level
-        Evaluation           Evaluation
-             │                   │
-             └─────────┬─────────┘
-                       ▼
-       Precision / Recall / F1 / AUROC
-                       │
-                       ▼
-              Final Analysis
-                       │
-                       ▼
-       Celeb-DF v2 Cross-Dataset
-              Evaluation
+The best-performing checkpoint from our custom training was saved as:
+
+```
+custom_training/xception_custom_best.pth
+```
+
+This is the main trained model checkpoint produced by this project.
+
+It was used for the final evaluation on the held-out FaceForensics++ C23 test set and is the checkpoint intended for the subsequent Celeb-DF v2 cross-dataset evaluation.
+
+### DeepfakeBench Released Weights
+
+DeepfakeBench also contains the following Xception detector checkpoint:
+
+```
+training/weights/xception_best.pth
+```
+
+This is a released DeepfakeBench detector checkpoint and was not used for our custom training experiment.
+
+### Weight Summary
+
+| File                                        | Description                                   | Role in Our Experiment      |
+| ------------------------------------------- | --------------------------------------------- | --------------------------- |
+| `training/pretrained/xception-b5690688.pth` | ImageNet-pretrained Xception backbone         | Used to initialize training |
+| `custom_training/xception_custom_best.pth`  | Best checkpoint generated during our training | Used for final testing      |
+| `training/weights/xception_best.pth`        | Released DeepfakeBench Xception detector      | Not used                    |
+
+### Training Flow
+
+```
+ImageNet-pretrained Xception
+        ↓
+Xception initialization
+        ↓
+Fine-tuning on FaceForensics++ C23
+        ↓
+Validation during training
+        ↓
+Best validation checkpoint
+        ↓
+xception_custom_best.pth
+        ↓
+Testing on held-out FF++ C23 test set
+```
+
+## Repository Structure
+
+```
+DeepfakeBench-Capstone/
+│
+├── analysis/
+├── custom_training/
+│   └── xception_custom_best.pth
+│
+├── datasets/
+│   └── rgb/
+│       └── FaceForensics++/
+│           └── simple_frames/
+│               └── dataset.csv
+│
+├── figures/
+├── preprocessing/
+│   └── dlib_tools/
+│       └── shape_predictor_81_face_landmarks.dat
+│
+├── results/
+├── training/
+│   ├── pretrained/
+│   │   └── xception-b5690688.pth
+│   └── weights/
+│       └── xception_best.pth
+│
+├── create_dataset_csv.py
+├── train_xception_custom.py
+├── test_custom_xception.py
+├── requirements.txt
+├── environment.yml
+├── README.md
+└── ...
 ```
